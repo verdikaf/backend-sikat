@@ -66,9 +66,9 @@ class KategoriLogistikController extends Controller
             return redirect('/kategori/edit/save');
         }
     }
-    public function kategoriDelete(Request $request)
-    {
-        DB::delete("DELETE * FROM t_kategori_logistik WHERE id = ?");
-        return redirect('/kategori');
-    }
+    // public function kategoriDelete(Request $request)
+    // {
+    //     DB::delete("DELETE * FROM t_kategori_logistik WHERE id = ?");
+    //     return redirect('/kategori');
+    // }
 }

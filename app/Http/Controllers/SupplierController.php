@@ -69,9 +69,9 @@ class SupplierController extends Controller
             return redirect('/supplier/edit/save');
         }
     }
-    public function supplierDelete(Request $request)
-    {
-        DB::delete("DELETE * FROM t_suplier WHERE id = ?");
-        return redirect('/supplier');
-    }
+    // public function supplierDelete(Request $request)
+    // {
+    //     DB::delete("DELETE * FROM t_suplier WHERE id = ?");
+    //     return redirect('/supplier');
+    // }
 }

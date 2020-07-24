@@ -23,8 +23,6 @@ Route::get('/pages', 'PagesController@index');
 //Login,Register,Logout User
 Route::get('/login', 'UserController@login');
 Route::post('/login/action', 'UserController@loginAction');
-Route::get('/register', 'UserController@register');
-Route::post('/register/action', 'UserController@registerAction');
 Route::get('/logout', 'UserController@logout');
 
 //user

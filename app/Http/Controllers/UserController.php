@@ -46,14 +46,31 @@ class UserController extends Controller
         }
     }
 
-    //register user
-    public function register(Request $request){
-        $data['title'] = "Register Sikat";
-        return view('register',$data);
+    //Logout
+    public function logout(){
+        Session::flush();
+        return redirect('/pages')->with('warning','Kamu berhasil logout');
     }
 
-    //register action
-    public function registerAction(Request $request){
+    //add user
+    public function user(Request $request){
+        $data['title'] = "Tambah User";
+        return view('user',$data);
+    }
+
+    public function userAdd(Request $request ) {
+        $data['role'] = DB::select("SELECT * FROM t_role");
+        $data['nav_menu'] = $this->displayMenu($request);
+        $data['session'] = array(
+            'id'             => $request->session()->get('s_id'),
+            'nama'           => $request->session()->get('s_nama'),
+            'roole'          => $request->session()->get('s_roole')
+        );
+        return view('user_add', $data);
+    }
+
+    //add save user
+    public function userAddSave(Request $request){
         $this->validate($request, [
             'id' => 'required',
             'nama' => 'required',
@@ -67,7 +84,7 @@ class UserController extends Controller
             'foto' => 'required',
             'id_role' => 'required'
         ]);
-        DB::table('user')->insert([
+        DB::table('t_user')->insert([
             'id' => $request->id,
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
@@ -81,12 +98,36 @@ class UserController extends Controller
             'role_id'=> $request->role_id
         ]);
        
-        return redirect('/login')->with('success','Registrasi sukses, silahkan login!');
+        return redirect('/user')->with('success','Registrasi sukses');
     }
 
-    //Logout
-    public function logout(){
-        Session::flush();
-        return redirect('/')->with('warning','Kamu berhasil logout');
+    public function userEdit(Request $request, $id) {
+        $user = DB::table('t_user')->where('id',$id)->get();
+        $role = DB::table('t_role')->get();
+        $session  = array(
+            'id'             => $request->session()->get('s_id'),
+            'nama'           => $request->session()->get('s_nama'),
+            'roole'          => $request->session()->get('s_roole')
+        );
+
+        $nav_menu = $this->displayMenu($request);
+        return view('user_edit',['user' => $user, 'session' => $session, 'nav_menu' => $nav_menu, 'role' => $role]);
+
+    }
+
+    public function userEditSave(Request $request) {
+        DB::table('t_user')->where('id',$request->id)->update([
+            'nama' => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'agama'=> $request->agama,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tgl_lahir' => $request->tgl_lahir,
+            'no_telp' => $request->no_telp,
+            'alamat' => $request->alamat,
+            'password' => $request->password,
+            'foto' => $request->foto,
+            'role_id'=> $request->role_id
+        ]);
+        return redirect('/user');
     }
 }
